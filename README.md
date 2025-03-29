@@ -60,3 +60,4 @@ Esto iniciará el servidor en `http://localhost:5173` (o el primer puerto dispon
 ## Ampliando la configuración de ESLint
 
 Si estás desarrollando una aplicación para producción, recomendamos usar TypeScript y habilitar reglas de linting con reconocimiento de tipos. Consulta la [plantilla TS](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) para integrar TypeScript y [`typescript-eslint`](https://typescript-eslint.io) en tu proyecto.
+

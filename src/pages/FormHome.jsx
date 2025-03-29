@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import { authenticateUser } from '../../utils/authUtils';
+import { useAuth } from '../contexts/AuthContext';
+import { authenticateUser } from '../utils/authUtils';
 
 const FormHome = () => {
   const [username, setUsername] = useState('');

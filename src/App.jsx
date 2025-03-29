@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 // Importo paginas
-import FormHome from './components/pages/FormHome'
-import ErrorPage from './components/pages/ErrorPage'
-import Dashboard from './components/pages/Dashboard'
+import FormHome from './pages/FormHome'
+import ErrorPage from './pages/ErrorPage'
+import Dashboard from './pages/Dashboard'
 // Importo protección de rutas
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
