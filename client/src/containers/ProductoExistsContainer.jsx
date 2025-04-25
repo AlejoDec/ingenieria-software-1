@@ -1,39 +1,85 @@
 import { useState } from "react";
 import axiosInstance from '../api/axiosInstance.js';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import './ProductoExist.css'; // Archivo CSS que crearemos
 
 export const ProductoExistContainer = () => {
+  const { user } = useAuth();
   const [form, setForm] = useState({
     referencia: "",
-    stock: 0
+    stock: 0,
+    sede_id: user?.sede_id || null
   });
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     try {
       await axiosInstance.post("/products/exist", form);
       navigate("/productos");
     } catch (error) {
       console.error("Error al asignar producto a sede:", error.response?.data || error.message);
+      setError(error.response?.data?.message || "Ocurrió un error al asignar el producto");
     }
   };
 
   return (
-    <div className="form-wrapper">
-      <h2>Asignar producto existente a esta sede</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Referencia del producto:
-          <input type="text" name="referencia" value={form.referencia} onChange={(e) => {setForm({...form, referencia: e.target.value})}} required />
-        </label>
-        <label>
-          Stock inicial:
-          <input type="text" name="stock" value={form.stock} onChange={(e) => {setForm({...form, stock: parseInt(e.target.value)})}} required min={0} />
-        </label>
-        <button type="submit">Asignar producto</button>
+    <div className="form-container">
+      <form onSubmit={handleSubmit} className="product-form">
+        <h2 className="form-title">Asignar producto existente</h2>
+        
+        {error && <div className="error-message">{error}</div>}
+
+        <div className="form-group">
+          <label htmlFor="referencia">Referencia del producto:</label>
+          <input
+            id="referencia"
+            type="text"
+            value={form.referencia}
+            onChange={(e) => setForm({ ...form, referencia: e.target.value })}
+            className="form-input"
+            required
+            placeholder="Ingresa la referencia del producto"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="stock">Stock inicial:</label>
+          <input
+            id="stock"
+            type="number"
+            value={form.stock || ''}
+            onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
+            className="form-input"
+            required
+            min="0"
+            placeholder="Cantidad inicial en stock"
+          />
+        </div>
+
+        {user.rol === "admin" && (
+          <div className="form-group">
+            <label htmlFor="sede_id">Seleccionar sede:</label>
+            <select
+              id="sede_id"
+              value={form.sede_id || ""}
+              onChange={(e) => setForm({ ...form, sede_id: parseInt(e.target.value) })}
+              className="form-input"
+              required
+            >
+              <option value="">-- Selecciona una sede --</option>
+              <option value="1">Bello</option>
+              <option value="2">Envigado</option>
+              <option value="3">Sabaneta</option>
+            </select>
+          </div>
+        )}
+
+        <button type="submit" className="submit-btn">Asignar Producto</button>
       </form>
     </div>
   );

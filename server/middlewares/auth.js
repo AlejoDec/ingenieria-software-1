@@ -23,6 +23,7 @@ export const verificarToken = async (req, res, next) => {
             nombre: usuario.nombre,
             email: usuario.email,
             sede_id: usuario.sede_id,
+            rol: usuario.rol,
         }
 
         next();

@@ -31,7 +31,7 @@ const Usuario = sequelize.define('user', {
       },
       sede_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'sedes',
           key: 'id'

@@ -49,17 +49,7 @@ export const ProductoFormView = ({producto, setProducto, handleSubmit}) => {
           />
         </div>
 
-        <div className="form-group">
-          <input 
-            type="number" 
-            placeholder="Stock Inicial"
-            value={producto.stock || ''} 
-            onChange={(e) => setProducto({...producto, stock: parseInt(e.target.value) || 0})}
-            className="form-input"
-            min="0"
-            required
-          />
-        </div>
+        
 
         <button type="submit" className="submit-btn">Guardar Producto</button>
       </form>

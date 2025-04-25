@@ -5,7 +5,7 @@ import './Navbar.css';
 // import logo from '../../assets/logo.svg';
 
 const Navbar = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const location = useLocation();
 
   return (
@@ -30,12 +30,16 @@ const Navbar = () => {
             >
               Inventario
             </Link>
-            <Link 
-              to="/productos/nuevo" 
-              className={`navbar-link ${location.pathname === '/nuevo' ? 'active' : ''}`}
-            >
-              AgregarPro
-            </Link>
+            {/* Solo visible para admin */}
+            {user?.rol === 'admin' && (
+              <Link 
+                to="/productos/nuevo" 
+                className={`navbar-link ${location.pathname === '/productos/nuevo' ? 'active' : ''}`}
+              >
+                AgregarPro
+              </Link>
+            )}
+
             <Link 
               to="/productos/exist" 
               className={`navbar-link ${location.pathname === '/exist' ? 'active' : ''}`}

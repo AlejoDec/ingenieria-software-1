@@ -71,8 +71,8 @@ export const createProduct = async (req, res) => {
     const transaction = await sequelize.transaction();
 
     try {
-        const { nombre, referencia, descripcion, categoria, stock } = req.body;
-        const sede_id = req.user.sede_id;
+        const { nombre, referencia, descripcion, categoria } = req.body;
+       
 
         const nuevoProducto = await Producto.create({
             nombre, referencia, descripcion, categoria
@@ -81,12 +81,7 @@ export const createProduct = async (req, res) => {
         console.log("Producto creado:", nuevoProducto);
 
 
-        await InventarioSede.create({
-            producto_id: nuevoProducto.id,
-            sede_id,
-            stock
-        }, { transaction });
-
+        
         await transaction.commit();
         res.status(201).json(nuevoProducto);
     } catch (error) {
@@ -137,8 +132,16 @@ export const addExistingProductToSede = async (req, res) => {
     const transaction = await sequelize.transaction();
 
     try {
-        const { referencia, stock } = req.body;
-        const sede_id = req.user.sede_id;
+        const { referencia, stock, sede_id: sedeDestino } = req.body;
+        const user = req.user;
+
+        //determinar a que sede se agrega el producto
+        const sede_id = await user.rol === 'admin' ? sedeDestino : sede_id;
+
+        if (!sede_id) {
+            await transaction.rollback();
+            return res.status(400).json({ error: "Debe especificar una sede válida" });
+          }
 
         // Buscar el producto por referencia
         const producto = await Producto.findOne({
