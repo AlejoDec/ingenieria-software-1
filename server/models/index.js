@@ -3,6 +3,7 @@ import Movimiento from "./Movimiento.js";
 import Usuario from './Usuario.js';
 import Sede from './Sede.js';
 import InventarioSede from './InventarioSede.js';
+import PeticionTraslado from "./PeticionTraslado.js";
 
 // Producto tiene muchos InventarioSede (productos en distintas sedes)
 Producto.hasMany(InventarioSede, { foreignKey: 'producto_id', as: 'inventarios' });
@@ -27,10 +28,18 @@ Movimiento.belongsTo(Sede, { foreignKey: 'sede_origen_id', as: 'origen' });
 Movimiento.belongsTo(Sede, { foreignKey: 'sede_destino_id', as: 'destino' });
 Movimiento.belongsTo(Usuario, { foreignKey: 'usuario_id' });
 
+// Relaciones de PeticionTraslado
+PeticionTraslado.belongsTo(Producto, { foreignKey: 'producto_id', as: 'producto' });
+PeticionTraslado.belongsTo(Sede, { foreignKey: 'sede_origen_id', as: 'origen' });
+PeticionTraslado.belongsTo(Sede, { foreignKey: 'sede_destino_id', as: 'destino' });
+PeticionTraslado.belongsTo(Usuario, { foreignKey: 'usuario_solicita_id', as: 'solicitante' });
+PeticionTraslado.belongsTo(Usuario, { foreignKey: 'usuario_responde_id', as: 'respondedor' });
+
 export {
   Producto,
   Movimiento,
   Usuario,
   Sede,
-  InventarioSede
+  InventarioSede,
+  PeticionTraslado
 };

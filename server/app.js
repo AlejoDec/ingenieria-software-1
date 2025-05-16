@@ -2,6 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import inventoryRoutes from './routes/inventory.js';
+import peticionesRoutes from './routes/peticiones.js';
 import auth from './routes/auth.js';
 import { testConnection, sequelize } from './config/db.js';
 import {Producto, Movimiento, Usuario, InventarioSede, Sede} from "./models/index.js";
@@ -14,6 +15,7 @@ app.use(express.json());
 
 //rutas
 app.use('/api/products', inventoryRoutes);
+app.use('/api/peticiones', peticionesRoutes)
 app.use('/api',auth);
 
 //ruta de prueba

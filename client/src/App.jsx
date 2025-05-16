@@ -1,17 +1,22 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 // Importo paginas
-import ErrorPage from './components/pages/ErrorPage'
+import ErrorPage from './features/productos/components/ErrorPage.jsx'
 // Importa el CONTENEDOR, no el componente presentacional
-import {ProductosContainer} from './containers/ProductosContainer';
-import { DashboardContainer } from './containers/DashboardContainer';// Importo protección de rutas
-import ProtectedRoute from './components/ProtectedRoute'
+import {ProductosContainer} from './features/productos/containers/ProductosContainer.jsx';
+import { DashboardContainer } from './features/dashboard/containers/DashboardContainer.jsx';
+import { FormLogInContainer } from './features/auth/containers/FormLogInContainer.jsx';
+import { ProductoFormContainer } from './features/productos/containers/ProductoFormContainer.jsx';
+import { PeticionTrasladoContainer } from './features/peticiones/containers/PeticionTrasladoContainer.jsx';
+//import { ProductoExistContainer } from './features/productos/containers/ProductoExistsContainer.jsx';
+//importo ruta protegida
+import ProtectedRoute from './components/shared/ProtectedRoute'
 import { AuthProvider } from './contexts/AuthContext'
+
 // Importo estilos
 import './App.css'
-import  Navbar  from './components/layout/Navbar'
-import FormLogIn from './components/auth/FormLogIn';
-import { ProductoFormContainer } from './containers/ProductoFormContainer';
-import { ProductoExistContainer } from './containers/ProductoExistsContainer';
+
+import  Navbar  from './components/shared/Navbar.jsx'
+
 
 function App() {
   return (
@@ -20,7 +25,7 @@ function App() {
 
         <Routes>
           {/*ruta publica*/}
-          <Route path='/' element={<FormLogIn />} />
+          <Route path='/' element={<FormLogInContainer />} />
           {/*rutas protegidas*/}
           <Route
             path='/home'
@@ -50,6 +55,15 @@ function App() {
           }
           />
           <Route
+          path='/productos/peticion-traslado'
+          element = {
+            <ProtectedRoute>
+              <Navbar/>
+              <PeticionTrasladoContainer/>
+            </ProtectedRoute>
+          }
+          />
+          {/*<Route
           path='/productos/exist'
           element = {
             <ProtectedRoute>
@@ -57,7 +71,7 @@ function App() {
               <ProductoExistContainer/>
             </ProtectedRoute>
           }
-          />
+          />*/}
           {/*redireccion para rutas no autenticadas*/}
 
           {/* Ruta para el error 404 */}
