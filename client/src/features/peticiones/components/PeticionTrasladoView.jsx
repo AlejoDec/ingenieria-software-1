@@ -35,7 +35,7 @@ export const PeticionTrasladoView = ({
       <form onSubmit={handleSubmit} className="traslado-form">
         {/* Campo de búsqueda del producto */}
         <label htmlFor="producto-input">Producto:</label>
-        <div className="product-search-container">
+        <div className="product-search-container" ref={inputRef}>
           <input
             id="producto-input"
             ref={inputRef}
@@ -49,7 +49,7 @@ export const PeticionTrasladoView = ({
             autoComplete="off"
             aria-autocomplete="list"
             aria-controls="productos-list"
-            disabled={loading}
+            readOnly={loading}
           />
           
           {/* Muestra la lista de sugerencias de productos si hay coincidencias */}
@@ -66,7 +66,8 @@ export const PeticionTrasladoView = ({
                   key={`suggestion-${p.producto.id}`}
                   role="option"
                   aria-selected={formData.producto_id === p.producto.id}
-                  onClick={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault();
                     onSelectProducto(p);
                     setShowSuggestions(false);
                   }}

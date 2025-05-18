@@ -10,11 +10,11 @@ import axiosInstance from "../../../api/axiosInstance";
 export const PeticionTrasladoContainer = () => {
   // Contexto de autenticación para obtener datos del usuario
   const { user } = useAuth();
-  
+
   // Referencias para los elementos del DOM
   const inputRef = useRef(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
-  
+
   // Estados del componente
   const [filtroSede, setFiltroSede] = useState("");
   const [filtroSedeDestino, setFiltroSedeDestino] = useState("");
@@ -57,13 +57,13 @@ export const PeticionTrasladoContainer = () => {
         `/peticiones/products?search=${searchTerm}&sede_id=${sedeId}`
       );
       setProductos(response.data);
-      
+
       // Filtrado inicial con los nuevos datos
       const filtered = response.data
         .filter(p => p.producto?.nombre?.toLowerCase().includes(searchTerm.toLowerCase()))
         .slice(0, 5);
       setFilteredProducts(filtered);
-      
+
       return response.data;
     } catch (error) {
       setError("Error al cargar productos: " + (error.response?.data?.message || error.message));
@@ -103,26 +103,29 @@ export const PeticionTrasladoContainer = () => {
    */
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    
-    setFormData(prev => {
-      const updated = { ...prev, [name]: value };
-      
-      if (name === 'nombre_producto') {
-        updated.producto_id = "";
-        
-        // Escapar caracteres especiales en la búsqueda
-        const searchTerm = value.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const filtered = productos
-          .filter(p => p.producto?.nombre?.toLowerCase().includes(searchTerm))
-          .slice(0, 5);
-        
-        setFilteredProducts(filtered);
-        setShowSuggestions(true);
-      }
 
-      return updated;
-    });
+    // Actualizar los estados de filtro cuando cambian los select
+    if (name === 'sede_origen_id') {
+      setFiltroSede(value);
+    } else if (name === 'sede_destino_id') {
+      setFiltroSedeDestino(value);
+    }
+
+    //escapar de caracteres especiales
+    if (name === 'nombre_producto') {
+      const searchTerm = value.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      setFilteredProducts(productos.filter(p => p.producto?.nombre?.toLowerCase().includes(searchTerm)).slice(0, 5));
+      setShowSuggestions(true);
+    }
+
+    setFormData(prev =>
+    ({
+      ...prev,
+      [name]: name.startsWith('sede_') ? sedeIdMap[value] || value : value,
+      producto_id: name === 'nombre_producto' ? "" : prev.producto_id
+    }));
   }, [productos]);
+
 
   /**
    * Maneja la selección de un producto de la lista
@@ -135,11 +138,11 @@ export const PeticionTrasladoContainer = () => {
         nombre_producto: producto.producto.nombre,
         producto_id: producto.producto.id
       }));
-      
-      // Forzar el foco después de la actualización del estado
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
+
+      // Usar un pequeño timeout para asegurar el foco después del render
+      requestAnimationFrame(() => {
+        inputRef.current?.focus({ preventScroll: true });
+      });
     }
   }, []);
 
@@ -156,14 +159,15 @@ export const PeticionTrasladoContainer = () => {
   /**
    * Maneja el evento blur del input de búsqueda
    */
-  const handleBlur = useCallback(() => {
-    setIsInputFocused(false);
-    setTimeout(() => {
-      if (!isInputFocused) {
-        setShowSuggestions(false);
-      }
-    }, 200);
-  }, [isInputFocused]);
+  const handleBlur = useCallback((e) => {
+  // Verificar si el nuevo elemento enfocado está fuera del contenedor
+  const currentFocus = e.relatedTarget;
+  const container = inputRef.current;
+  
+  if (!container?.contains(currentFocus)) {
+    setShowSuggestions(false);
+  }
+}, []);
 
   /**
    * Maneja el envío del formulario
@@ -194,7 +198,7 @@ export const PeticionTrasladoContainer = () => {
         cantidad: formData.cantidad,
         observaciones: formData.observaciones
       });
-      
+
       alert("Petición enviada con éxito.");
       setFormData({
         producto_id: "",
