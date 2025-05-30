@@ -1,13 +1,67 @@
 //punto de entrada del servidor
-
+import { Server } from 'socket.io';
+import { createServer } from 'node:http';
+import jwt from 'jsonwebtoken';
 import app from './app.js';
 import 'dotenv/config';
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
+//crear servidor http
+const server = createServer(app);
+
+//configurar socket.io
+const io = new Server(server, {
+    cors: {
+        origin: process.env.CLIENT_URL || 'http://localhost:5173',
+        methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+        credentials: true,
+    },
+    transports: ['websocket', 'polling'],
+});
+
+//Middleware para auth del socket
+io.use((socket, next) => {
+    try {
+         const token = socket.handshake.auth.token;
+        if (!token) return next(new Error('Acceso no autorizado'));
+        
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        socket.userData = decoded;
+        next();
+    } catch (error) {
+        next(new Error('Token inválido'));
+    }
+})
+
+// Manejar conexiones
+io.on('connection', (socket) => {
+    console.log('Nueva conexión:', socket.id);
+    
+    // Registrar en la sede correspondiente
+    socket.on('register-sede', (sedeId) => {
+        if (socket.userData.sede_id !== sedeId) {
+            return socket.disconnect(true);
+        }
+        
+        socket.join(`sede:${sedeId}`);
+        console.log(`Usuario ${socket.userData.id} registrado en sede ${sedeId}`);
+    });
+
+    // Manejar desconexiones
+    socket.on('disconnect', () => {
+        console.log('Usuario desconectado:', socket.id);
+    });
+});
+
+
+//iniciar el servidor
+server.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 })
+
+export { io };
+
 
 
 /*

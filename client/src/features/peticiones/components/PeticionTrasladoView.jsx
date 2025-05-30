@@ -35,7 +35,7 @@ export const PeticionTrasladoView = ({
       <form onSubmit={handleSubmit} className="traslado-form">
         {/* Campo de búsqueda del producto */}
         <label htmlFor="producto-input">Producto:</label>
-        <div className="product-search-container" ref={inputRef}>
+        <div className="product-search-container" >
           <input
             id="producto-input"
             ref={inputRef}

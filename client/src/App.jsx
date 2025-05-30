@@ -7,6 +7,7 @@ import { DashboardContainer } from './features/dashboard/containers/DashboardCon
 import { FormLogInContainer } from './features/auth/containers/FormLogInContainer.jsx';
 import { ProductoFormContainer } from './features/productos/containers/ProductoFormContainer.jsx';
 import { PeticionTrasladoContainer } from './features/peticiones/containers/PeticionTrasladoContainer.jsx';
+import { PeticionesTableContainer } from './features/peticiones/containers/PeticionesTableContainer.jsx';
 //import { ProductoExistContainer } from './features/productos/containers/ProductoExistsContainer.jsx';
 //importo ruta protegida
 import ProtectedRoute from './components/shared/ProtectedRoute'
@@ -60,6 +61,15 @@ function App() {
             <ProtectedRoute>
               <Navbar/>
               <PeticionTrasladoContainer/>
+            </ProtectedRoute>
+          }
+          />
+          <Route
+          path='/productos/peticiones'
+          element = {
+            <ProtectedRoute>
+              <Navbar/>
+              <PeticionesTableContainer/>
             </ProtectedRoute>
           }
           />

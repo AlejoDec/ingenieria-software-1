@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { PeticionTrasladoView } from "../components/PeticionTrasladoView";
 import { useAuth } from "../../../contexts/AuthContext";
 import axiosInstance from "../../../api/axiosInstance";
+import {NotificacionContainer} from "./NotificacionContainer.jsx";
 
 /**
  * Componente contenedor para la gestión de peticiones de traslado
@@ -191,7 +192,7 @@ export const PeticionTrasladoContainer = () => {
     }
 
     try {
-      await axiosInstance.post("/traslados/peticion", {
+      await axiosInstance.post("/peticiones/crear-peticion", {
         producto_id: formData.producto_id,
         sede_origen_id: formData.sede_origen_id,
         sede_destino_id: formData.sede_destino_id,
@@ -219,6 +220,7 @@ export const PeticionTrasladoContainer = () => {
   };
 
   return (
+    <>
     <PeticionTrasladoView
       formData={formData}
       productos={filteredProducts}
@@ -237,7 +239,7 @@ export const PeticionTrasladoContainer = () => {
       setShowSuggestions={setShowSuggestions}
       handleBlur={handleBlur}
       inputRef={inputRef}
-      handleFocus={handleFocus}
-    />
+      handleFocus={handleFocus} />
+      <NotificacionContainer /></>
   );
 };

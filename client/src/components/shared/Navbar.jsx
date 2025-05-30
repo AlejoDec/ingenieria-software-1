@@ -36,6 +36,12 @@ const Navbar = () => {
             >
               Pedir Productos
             </Link>
+            <Link 
+              to="/productos/peticiones" 
+              className={`navbar-link ${location.pathname === '/productos/peticiones' ? 'active' : ''}`}
+            >
+              Ver Peticiones
+            </Link>
             {/* Solo visible para admin */}
             {user?.rol === 'admin' && (
               <Link 

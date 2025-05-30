@@ -5,28 +5,33 @@ import inventoryRoutes from './routes/inventory.js';
 import peticionesRoutes from './routes/peticiones.js';
 import auth from './routes/auth.js';
 import { testConnection, sequelize } from './config/db.js';
-import {Producto, Movimiento, Usuario, InventarioSede, Sede} from "./models/index.js";
+import { Producto, Movimiento, Usuario, InventarioSede, Sede } from "./models/index.js";
 
 const app = express();
 
 //middlewares
-app.use(cors());
+// Configuración CORS para Express (debe coincidir con Socket.IO)
+app.use(cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    credentials: true, // Permite enviar cookies y encabezados de autorización
+}));
 app.use(express.json());
 
 //rutas
 app.use('/api/products', inventoryRoutes);
 app.use('/api/peticiones', peticionesRoutes)
-app.use('/api',auth);
+app.use('/api', auth);
 
 //ruta de prueba
-app.get('/', (reg, res) => {
+app.get('/', (req, res) => {
     res.send("Api inventario funcionando")
 })
 
 //conexión DB
-const startServer = async() => {
+const startServer = async () => {
     await testConnection();
-    await sequelize.sync({alter: true}) //crea la tabla si no existe y borra y sobreescribe si existe
+    await sequelize.sync({ alter: true }) //crea la tabla si no existe y borra y sobreescribe si existe
         .then(() => console.log('tablas creadas'))
         .catch((error) => console.error('Error al crear tablas:', error))
 }

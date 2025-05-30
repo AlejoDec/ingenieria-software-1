@@ -29,7 +29,7 @@ const PeticionTraslado = sequelize.define('peticion_traslado', {
     type: DataTypes.DATE },
   usuario_solicita_id: { 
     type: DataTypes.INTEGER, 
-    allowNull: false },
+    allowNull: true },
   usuario_responde_id: { 
     type: DataTypes.INTEGER },
   observaciones: { type: DataTypes.TEXT }
