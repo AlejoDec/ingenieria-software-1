@@ -29,3 +29,53 @@
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.movimientos-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 2rem;
+}
+
+.table-header {
+  background: #f5f6fa;
+}
+
+.table-head-cell {
+  padding: 12px 8px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #eaeaea;
+  text-align: left;
+}
+
+.table-body .table-row:nth-child(even) {
+  background: #fafbfc;
+}
+
+.table-row {
+  transition: background 0.2s;
+}
+
+.table-row:hover {
+  background: #f0f4f8;
+}
+
+.table-cell {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eaeaea;
+  color: #444;
+  font-size: 15px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
