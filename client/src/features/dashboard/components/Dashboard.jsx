@@ -1,7 +1,7 @@
 import "../styles/Dashboard.css";
 import { LowStockProductsView } from "./LowStockProductsView";
 import React from "react";
-import "../styles/MovimientosTable.css";
+/* import "../styles/MovimientosTable.css"; */
 
 // Componente de tabla de movimientos
 export const MovimientosTable = ({ movimientos }) => {
@@ -75,24 +75,18 @@ const movimientosEjemplo = [
     }
 ];
 
-export const DashboardView = ({ sedeId }) => {
+export const DashboardView = () => {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
             <div className="dashboard-content">
-                <h1>Panel de Control</h1>
-                <div className="summary-cards">
-                    <div className="card">
-                        <h3>Productos en stock</h3>
-                        <p>0</p>
-                    </div>
-                </div>
+            
+                {/* Sección de movimientos */}
+                <h2 className="mt-8 mb-4">Movimientos recientes</h2>
+                <MovimientosTable movimientos={movimientosEjemplo} />
 
                 {/* Sección de productos con bajo stock */}
                 <LowStockProductsView />
 
-                {/* Sección de movimientos */}
-                <h2 className="mt-8 mb-4">Movimientos recientes</h2>
-                <MovimientosTable movimientos={movimientosEjemplo} />
             </div>
         </div>
     );
