@@ -12,7 +12,6 @@ export const MovimientosTable = ({ movimientos }) => {
             <table className="movimientos-table">
                 <thead className="table-header">
                     <tr>
-                        <th className="table-head-cell">ID</th>
                         <th className="table-head-cell">Producto ID</th>
                         <th className="table-head-cell">Sede Origen</th>
                         <th className="table-head-cell">Sede Destino</th>
@@ -27,7 +26,6 @@ export const MovimientosTable = ({ movimientos }) => {
                     {movimientos && movimientos.length > 0 ? (
                         movimientos.map((mov) => (
                             <tr key={mov.id} className="table-row">
-                                <td className="table-cell">{mov.id}</td>
                                 <td className="table-cell">{mov.producto_id}</td>
                                 <td className="table-cell">{mov.sede_origen_id ?? "—"}</td>
                                 <td className="table-cell">{mov.sede_destino_id ?? "—"}</td>
@@ -49,46 +47,26 @@ export const MovimientosTable = ({ movimientos }) => {
     );
 };
 
-// Ejemplo de datos de prueba
-const movimientosEjemplo = [
-    {
-        id: 1,
-        producto_id: 101,
-        sede_origen_id: 1,
-        sede_destino_id: 2,
-        cantidad: 10,
-        tipo: "traslado",
-        usuario_id: 5,
-        fecha: "2024-05-31T10:00:00Z",
-        observaciones: "Traslado urgente"
-    },
-    {
-        id: 2,
-        producto_id: 102,
-        sede_origen_id: null,
-        sede_destino_id: 1,
-        cantidad: 20,
-        tipo: "entrada",
-        usuario_id: 3,
-        fecha: "2024-05-30T15:30:00Z",
-        observaciones: ""
-    }
-];
 
-export const DashboardView = () => {
+
+export const DashboardView = ({ movimientos, loading, error }) => {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
             <div className="dashboard-content">
-            
                 {/* Sección de movimientos */}
                 <h2 className="mt-8 mb-4">Movimientos recientes</h2>
-                <MovimientosTable movimientos={movimientosEjemplo} />
+                {loading ? (
+                    <div>Cargando movimientos...</div>
+                ) : error ? (
+                    <div>{error}</div>
+                ) : (
+                    <MovimientosTable movimientos={movimientos} />
+                )}
 
                 {/* Sección de productos con bajo stock */}
                 <LowStockProductsView />
-
             </div>
         </div>
     );
-}
+};
 
