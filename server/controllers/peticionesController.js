@@ -4,6 +4,7 @@ import {
     notificarPeticionUseCase,
     getPeticionesUseCase
 } from "../use_cases/peticiones/index.js";
+import Movimiento from "../models/Movimiento.js";
 
 //obtener productos
 export const getProducts = async (req, res) => {
@@ -50,10 +51,22 @@ export const crearPeticionTraslado = async (req, res) => {
             usuario_id: req.user.id // ID del usuario que solicita la petición
         });
 
+        // Registrar el movimiento asociado a la petición
+        await Movimiento.create({
+            producto_id,
+            sede_origen_id,
+            sede_destino_id,
+            cantidad,
+            tipo: 'traslado',
+            usuario_id: req.user.id,
+            fecha: new Date(),
+            observaciones: observaciones || ''
+        });
+
         res.status(201).json({
             success: true,
             data: peticion,
-            message: 'Petición creada y notificada correctamente'
+            message: 'Petición creada y movimiento registrado correctamente'
         });
     } catch (error) {
         console.error("Error en crearPeticionTraslado:", error.message);

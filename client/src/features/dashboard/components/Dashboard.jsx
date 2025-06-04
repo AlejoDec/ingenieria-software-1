@@ -1,6 +1,7 @@
+import React, { useEffect, useState } from "react";
 import "../styles/Dashboard.css";
 import { LowStockProductsView } from "./LowStockProductsView";
-import React from "react";
+
 /* import "../styles/MovimientosTable.css"; */
 
 // Componente de tabla de movimientos
@@ -49,7 +50,27 @@ export const MovimientosTable = ({ movimientos }) => {
 
 
 
-export const DashboardView = ({ movimientos, loading, error }) => {
+export const DashboardView = () => {
+    const [movimientos, setMovimientos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchMovimientos = async () => {
+            try {
+                const res = await fetch("http://localhost:4000/api/movimientos");
+                if (!res.ok) throw new Error("Error al obtener movimientos");
+                const data = await res.json();
+                setMovimientos(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchMovimientos();
+    }, []);
+
     return (
         <div className="flex flex-col items-center justify-center h-screen">
             <div className="dashboard-content">
