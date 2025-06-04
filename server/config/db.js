@@ -14,6 +14,7 @@ const sequelize = new Sequelize(
         logging: false, //para no mostrar logs de sql en consola
     }
 );
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD, typeof process.env.DB_PASSWORD);
 
 //prueba de conexión
 const testConnection = async () => {

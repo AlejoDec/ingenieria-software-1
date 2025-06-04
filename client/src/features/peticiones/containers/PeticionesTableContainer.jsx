@@ -33,11 +33,11 @@ export const PeticionesTableContainer = () => {
 
     const responderPeticion = async (peticionId, respuesta) => {
         try {
-            await axiosInstance.patch(`/peticiones/${peticionId}/responder`, { respuesta });
+            await axiosInstance.patch(`/peticiones/responder/${peticionId}`, { respuesta });
             // Actualizar el estado local para evitar nuevo fetch
             setPeticionesRecibidas(prev =>
                 prev.map(p => p.id === peticionId
-                    ? { ...p, estado: respuesta === 'aceptar' ? 'aceptada' : 'rechazada' } : p))
+                    ? { ...p, estado: respuesta === 'aceptar' ? 'aceptada' : 'rechazada' } : p));
         } catch (err) {
             console.error('Error al responder la petición:', err);
             setError(err.response?.data?.message || 'Error al procesar la respuesta');

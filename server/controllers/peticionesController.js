@@ -2,7 +2,8 @@ import {
     getProductsTransferUseCase,
     crearPeticionUseCase,
     notificarPeticionUseCase,
-    getPeticionesUseCase
+    getPeticionesUseCase,
+    updatePeticionEstadoUseCase
 } from "../use_cases/peticiones/index.js";
 
 //obtener productos
@@ -100,7 +101,7 @@ export const getPeticionesRecibidas = async (req, res) => {
         const peticiones = await getPeticionesUseCase(
             null,         // usuarioId (no filtrar por usuario)
             req.user.sede_id, // sede_destino_id
-            req.query.estado || 'pendiente', // estado (default: pendiente)
+            req.query.estado || null, // estado (default: pendiente)
             'sede_destino_id' // Filtrar por sede destino
         );
 
@@ -117,3 +118,39 @@ export const getPeticionesRecibidas = async (req, res) => {
         });
     }
 }
+
+export const responsePeticion = async (req, res) => {
+    try {
+        const result = await updatePeticionEstadoUseCase(
+            req.params.id, // ID de la petición
+            req.user.id, // ID del usuario que responde
+            req.body.respuesta, // Nuevo estado (aceptada/rechazada)
+            req.user.sede_id // ID de la sede del usuario que responde
+        );
+
+        res.json({
+            success: true,
+            message: `Petición ${req.body.respuesta === 'aceptada' ? 'aceptada' : 'rechazada'} correctamente`,
+            data: result
+        });
+    } catch (error) {
+        console.error("Error en responderPeticion:", error);
+        const statusCode = error.message.includes('No estás autorizado para responder esta petición.') ? 403 :
+            error.message.includes('Petición no encontrada.') ? 404 :
+            error.message.includes('La petición ya fue respondida.' || 'Stock insuficiente') ? 400 : 500;
+        res.status(statusCode).json({
+            error: 'Error al responder la petición',
+            detalles: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+        
+    }
+}
+
+/*
+403 para no autorizado.
+404 para no encontrado.
+400 para bad request (datos inválidos).
+500 para error interno del servidor.
+// 200 para éxito general.
+// 201 para creación exitosa de recursos.
+*/ 

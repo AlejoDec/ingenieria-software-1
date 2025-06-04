@@ -6,18 +6,31 @@ export const crearPeticionUseCase = async (data) => {
     const { producto_id, sede_origen_id, sede_destino_id, cantidad, observaciones, usuario_id } = data;
 
     // Validar que exista inventario en la sede origen
-    const inventario = await InventarioSede.findOne({
+    const inventarioOrigen = await InventarioSede.findOne({
         where: {
             producto_id,
             sede_id: sede_origen_id
         }
     });
-    if (!inventario) {
+    if (!inventarioOrigen) {
         throw new Error('El producto no existe en la sede origen');
     }
-    if (inventario.cantidad < cantidad) {
-        throw new Error('Cantidad solicitada mayor al inventario disponible');
+    
+
+    // Validar que exista inventario en la sede destino
+    const inventarioDestino = await InventarioSede.findOne({
+        where: {
+            producto_id,
+            sede_id: sede_destino_id
+        }
+    });
+    if (!inventarioDestino) {
+        throw new Error('El producto no existe en la sede destino');
     }
+    if (inventarioDestino.cantidad < cantidad) {
+        throw new Error('Cantidad solicitada mayor al inventario disponible en la sede destino');
+    }
+
     const peticion = await PeticionTraslado.create({
         producto_id,
         sede_origen_id,
