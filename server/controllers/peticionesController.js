@@ -3,7 +3,8 @@ import {
     crearPeticionUseCase,
     notificarPeticionUseCase,
     getPeticionesUseCase,
-    updatePeticionEstadoUseCase
+    updatePeticionEstadoUseCase,
+    getMovimientosUseCase
 } from "../use_cases/peticiones/index.js";
 
 //obtener productos
@@ -119,6 +120,7 @@ export const getPeticionesRecibidas = async (req, res) => {
     }
 }
 
+// Responder a una petición de traslado (aceptar/rechazar)
 export const responsePeticion = async (req, res) => {
     try {
         const result = await updatePeticionEstadoUseCase(
@@ -137,12 +139,44 @@ export const responsePeticion = async (req, res) => {
         console.error("Error en responderPeticion:", error);
         const statusCode = error.message.includes('No estás autorizado para responder esta petición.') ? 403 :
             error.message.includes('Petición no encontrada.') ? 404 :
-            error.message.includes('La petición ya fue respondida.' || 'Stock insuficiente') ? 400 : 500;
+                error.message.includes('La petición ya fue respondida.' || 'Stock insuficiente') ? 400 : 500;
         res.status(statusCode).json({
             error: 'Error al responder la petición',
             detalles: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
+
+    }
+}
+
+//Obtener Movimientos de productos
+
+export const getMovimientos = async (req, res) => {
+    try {
+        const { producto_nombre, sede_nombre, fecha_inicio, fecha_fin } = req.query;
         
+        // Si el usuario no es admin, solo puede ver movimientos de su sede
+        const sedeFiltro = req.user.rol === 'admin' ? sede_nombre : req.user.sede_id;
+
+        const movimientos = await getMovimientosUseCase({
+            producto_nombre,
+            sede_nombre: sedeFiltro,
+            fecha_inicio,
+            fecha_fin
+        });
+
+        res.json({
+            success: true,
+            count: movimientos.length,
+            data: movimientos
+        });
+
+
+    } catch (error) {
+        console.error("Error en getMovimientos:", error);
+        res.status(500).json({
+            error: 'Error al obtener movimientos',
+            detalles: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 }
 

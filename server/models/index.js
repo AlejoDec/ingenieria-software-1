@@ -16,17 +16,17 @@ Sede.hasMany(InventarioSede, { foreignKey: 'sede_id', as: 'inventarios' });
 InventarioSede.belongsTo(Sede, { foreignKey: 'sede_id', as: 'sede' });
 
 // Relación Movimiento con Producto
-Producto.hasMany(Movimiento, { foreignKey: 'producto_id' });
-Movimiento.belongsTo(Producto, { foreignKey: 'producto_id' });
+Producto.hasMany(Movimiento, { foreignKey: 'producto_id', as: 'movimientos' });
+Movimiento.belongsTo(Producto, { foreignKey: 'producto_id', as: 'producto' });
 
 // Relación Usuario con Sede
-Sede.hasMany(Usuario, { foreignKey: 'sede_id' });
+Sede.hasMany(Usuario, { foreignKey: 'usuarios' });
 Usuario.belongsTo(Sede, { foreignKey: 'sede_id' });
 
 // Relaciones para los movimientos entre sedes
 Movimiento.belongsTo(Sede, { foreignKey: 'sede_origen_id', as: 'origen' });
 Movimiento.belongsTo(Sede, { foreignKey: 'sede_destino_id', as: 'destino' });
-Movimiento.belongsTo(Usuario, { foreignKey: 'usuario_id' });
+Movimiento.belongsTo(Usuario, { foreignKey: 'usuario_id', as: 'usuario' });
 
 // Relaciones de PeticionTraslado
 PeticionTraslado.belongsTo(Producto, { foreignKey: 'producto_id', as: 'producto' });

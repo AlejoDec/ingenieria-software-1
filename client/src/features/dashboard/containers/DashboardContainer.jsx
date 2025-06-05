@@ -1,12 +1,15 @@
-
 import { DashboardView } from "../components/Dashboard";
-import {useAuth} from "../../../contexts/AuthContext.jsx"
-
-export const DashboardContainer = () => {
+/* import {useAuth} from "../../../contexts/AuthContext.jsx"
+ */
+export const DashboardContainer = ({ movimientos, loading, error }) => {
         
 
   return (
-    <DashboardView/>
+    <DashboardView
+      movimientos={movimientos}
+      loading={loading}
+      error={error}
+    />
   )
 }
 

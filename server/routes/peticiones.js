@@ -4,7 +4,8 @@ import {
     crearPeticionTraslado,
     getMisPeticiones,
     getPeticionesRecibidas,
-    responsePeticion
+    responsePeticion,
+    getMovimientos
 } from "../controllers/peticionesController.js";
 import { verificarToken } from "../middlewares/auth.js";
 
@@ -15,5 +16,6 @@ router.post("/crear-peticion", verificarToken, crearPeticionTraslado); // Crear 
 router.get("/mias", verificarToken, getMisPeticiones); // Peticiones enviadas
 router.get("/recibidas", verificarToken, getPeticionesRecibidas); // Peticiones recibidas
 router.patch("/responder/:id", verificarToken, responsePeticion); // Responder a una petición
+router.get("/movimientos",verificarToken, getMovimientos); // Obtener movimientos de productos entre sedes
 
 export default router;

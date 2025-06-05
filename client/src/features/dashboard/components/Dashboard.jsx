@@ -19,7 +19,7 @@ export const DashboardView = ({  }) => {
     );
 }
 // Ejemplo de datos de prueba
-const movimientosEjemplo = [
+/* const movimientosEjemplo = [
     {
         id: 1,
         producto_id: 101,
@@ -42,4 +42,4 @@ const movimientosEjemplo = [
         fecha: "2024-05-30T15:30:00Z",
         observaciones: ""
     }
-];
+]; */
