@@ -1,6 +1,6 @@
-import InventarioSede from "../../models/InventarioSede.js";
-import Sede from "../../models/Sede.js";
-import Producto from "../../models/Producto.js";
+import {InventarioSede} from "../../models/index.js";
+import {Sede} from "../../models/index.js";
+import {Producto} from "../../models/index.js";
 import { sequelize } from "../../config/db.js";
 
 

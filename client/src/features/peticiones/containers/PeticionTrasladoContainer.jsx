@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { PeticionTrasladoView } from "../components/PeticionTrasladoView";
 import { useAuth } from "../../../contexts/AuthContext";
 import axiosInstance from "../../../api/axiosInstance";
-import {NotificacionContainer} from "./NotificacionContainer.jsx";
+//import {NotificacionContainer} from "./NotificacionContainer.jsx";
 
 /**
  * Componente contenedor para la gestión de peticiones de traslado
@@ -240,6 +240,6 @@ export const PeticionTrasladoContainer = () => {
       handleBlur={handleBlur}
       inputRef={inputRef}
       handleFocus={handleFocus} />
-      <NotificacionContainer /></>
+      </>
   );
 };

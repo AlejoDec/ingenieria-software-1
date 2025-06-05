@@ -28,7 +28,8 @@ export const AuthProvider = ({ children }) => {
     newSocket.on('connect', () => {
       console.log('Socket conectado');
       newSocket.emit('register-sede', user.sede_id);
-            setIsSocketConnected(true);
+      newSocket.emit('register-usuario', user.id);
+      setIsSocketConnected(true);
 
     });
 
@@ -61,7 +62,7 @@ export const AuthProvider = ({ children }) => {
     setSocket(newSocket);
     return newSocket;
 
-  }, [token, user?.sede_id]);
+  }, [token, user?.sede_id, user?.id]);
 
   //Función para limpiar notificaciones
   const clearNotifications = useCallback(() => {

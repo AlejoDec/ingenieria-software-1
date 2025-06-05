@@ -15,7 +15,7 @@ export const NotificacionContainer = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const unreadCount = notifications.filter(n => !n.read).length;
 
-    // Cerrar notificaciones automáticamente después de 10 segundos
+    // Cerrar notificaciones automáticamente después de 30 segundos
     useEffect(() => {
         let timer;
         if (notifications.length > 0 && !isPanelOpen) {
@@ -23,7 +23,7 @@ export const NotificacionContainer = () => {
                 notifications.forEach(n => {
                     if (!n.read) markNotificationAsRead(n.id);
                 });
-            }, 10000);
+            }, 30000);
         }
 
         return () => {

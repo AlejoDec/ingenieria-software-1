@@ -1,5 +1,5 @@
 import PeticionTraslado from "../../models/PeticionTraslado.js";
-import { notificarPeticionUseCase } from "./notificarPeticion.js";
+import { notificarPeticionUseCase } from "../notificaciones/notificarPeticion.js";
 import InventarioSede from "../../models/InventarioSede.js";
 
 export const crearPeticionUseCase = async (data) => {

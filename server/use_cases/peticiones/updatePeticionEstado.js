@@ -2,7 +2,7 @@ import Movimiento from "../../models/Movimiento.js";
 import PeticionTraslado from "../../models/PeticionTraslado.js";
 import InventarioSede from "../../models/InventarioSede.js";
 import { sequelize } from "../../config/db.js";
-import e from "cors";
+import { notificarRespuestaUseCase } from "../notificaciones/notificarRespuesta.js";
 
 /**
  * Responde una petición de traslado, aceptándola o rechazándola.
@@ -19,15 +19,19 @@ export const updatePeticionEstadoUseCase = async (peticionId, usuarioId, respues
     const transaction = await sequelize.transaction();
     try {
 
-        const peticion = await PeticionTraslado.findByPk(peticionId, { transaction });
-
+        const peticion = await PeticionTraslado.findByPk(peticionId, {
+            transaction,
+            include: ['solicitante'] // Añadimos esto para obtener el usuario que hizo la petición
+        });
         //Validaciones
         if (!peticion) throw new Error("Petición no encontrada.");
         if (peticion.estado !== 'pendiente') throw new Error("La petición ya fue respondida.");
         if (sedeIdUsuario !== peticion.sede_destino_id) throw new Error("No estás autorizado para responder esta petición.");
         if (!['aceptar', 'rechazar'].includes(respuesta)) throw new Error("Respuesta inválida.");
 
+        let estadoActualizado;
         if (respuesta === 'rechazar') {
+            estadoActualizado = 'rechazada';
             await peticion.update({
                 estado: 'rechazada',
                 fecha_respuesta: new Date(),
@@ -35,6 +39,7 @@ export const updatePeticionEstadoUseCase = async (peticionId, usuarioId, respues
                 observaciones: 'Rechazada por la sede destino'
             }, { transaction });
         } else if (respuesta === 'aceptar') {
+            estadoActualizado = 'aceptada';
 
             const [inventarioSedeEnvía, inventarioSedeRecibe] = await Promise.all([
                 // Verificar si hay suficiente stock en la sede que envía (sede destino)
@@ -99,6 +104,20 @@ export const updatePeticionEstadoUseCase = async (peticionId, usuarioId, respues
 
 
         await transaction.commit(); // Confirmar la transacción
+
+        // Notificar al usuario que hizo la petición
+        try {
+            await notificarRespuestaUseCase({
+                peticionId,
+                respuesta: estadoActualizado,
+                usuarioRespondedorId: usuarioId,
+                solicitanteId: peticion.solicitante.id
+            });
+        } catch (notifyError) {
+            console.error("Error al notificar, pero la transacción ya fue exitosa:", notifyError);
+            // No re-lanzamos el error para no afectar la operación principal
+        }
+
         // Obtener la petición actualizada SIN transacción
         return await PeticionTraslado.findByPk(peticionId, {
             include: ['producto', 'origen', 'destino']

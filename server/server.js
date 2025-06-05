@@ -23,9 +23,9 @@ const io = new Server(server, {
 //Middleware para auth del socket
 io.use((socket, next) => {
     try {
-         const token = socket.handshake.auth.token;
+        const token = socket.handshake.auth.token;
         if (!token) return next(new Error('Acceso no autorizado'));
-        
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         socket.userData = decoded;
         next();
@@ -37,16 +37,27 @@ io.use((socket, next) => {
 // Manejar conexiones
 io.on('connection', (socket) => {
     console.log('Nueva conexión:', socket.id);
-    
+
     // Registrar en la sede correspondiente
     socket.on('register-sede', (sedeId) => {
         if (socket.userData.sede_id !== sedeId) {
             return socket.disconnect(true);
         }
-        
+
         socket.join(`sede:${sedeId}`);
         console.log(`Usuario ${socket.userData.id} registrado en sede ${sedeId}`);
     });
+
+    // Registrar en sala de usuario
+    socket.on('register-usuario', (usuarioId) => {
+        if (socket.userData.id !== usuarioId) {
+            return socket.disconnect(true);
+        }
+
+        socket.join(`usuario:${usuarioId}`);
+        console.log(`Usuario ${usuarioId} registrado en su sala personal`);
+    });
+
 
     // Manejar desconexiones
     socket.on('disconnect', () => {

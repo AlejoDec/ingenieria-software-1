@@ -114,61 +114,105 @@ export const NotificacionView = ({
 };
 
 const NotificationItem = ({ notification, isUnread, onClick, onRemove }) => {
-    // Valores por defecto para evitar errores
-  const sedeOrigenNombre = notification.sede_origen?.nombre || 'Sede origen';
-  const solicitante = notification.solicitante || 'Usuario';
-    return (<div
-        onClick={() => onClick(notification.id)}
-        className={`notification-item ${isUnread ? 'notification-item-unread' : ''}`}
-    >
-        <div className="notification-content">
-            <div className="notification-text">
-                <div className="notification-message">
-                    {isUnread && (
-                        <span className="notification-unread-indicator"></span>
-                    )}
+    // Función para renderizar el contenido según el tipo de notificación
+    const renderContent = () => {
+        if (notification.type === 'nueva petición' || !notification.type) {
+            // Notificación de nueva petición (mantenemos compatibilidad con versiones anteriores)
+            const sedeOrigenNombre = notification.sede_origen?.nombre || 'Sede origen';
+            const solicitante = notification.solicitante || 'Usuario';
+
+            return (
+                <>
                     <h4 className={`${isUnread ? 'text-gray-900' : 'text-gray-700'}`}>
                         Solicitud de traslado
                     </h4>
+                    <div className="notification-details">
+                        <div className="notification-detail">
+                            <span className="notification-detail-label">Producto:</span>
+                            <span>ID-{notification.producto_id}</span>
+                        </div>
+                        <div className="notification-detail">
+                            <span className="notification-detail-label">Cantidad:</span>
+                            <span>{notification.cantidad}</span>
+                        </div>
+                        <div className="notification-detail">
+                            <span className="notification-detail-label">Origen:</span>
+                            <span className="truncate">{sedeOrigenNombre}</span>
+                        </div>
+                        <div className="notification-detail">
+                            <span className="notification-detail-label">Solicitante:</span>
+                            <span className="truncate">{solicitante}</span>
+                        </div>
+                    </div>
+                </>
+            );
+       } else if (notification.type === 'respuesta-peticion') {
+            const estadoClass = notification.respuesta === 'aceptada' 
+                ? 'text-green-600' 
+                : 'text-red-600';
+            
+            return (
+                <>
+                    <h4 className={`${isUnread ? 'text-gray-900' : 'text-gray-700'}`}>
+                        Respuesta a tu petición <span className="font-semibold">#{notification.peticionId}</span>
+                    </h4>
+                    <div className="notification-details">
+                        <div className="notification-detail">
+                            <span className="notification-detail-label">Estado:</span>
+                            <span className={`font-medium ${estadoClass}`}>
+                                {notification.respuesta.toUpperCase()}
+                            </span>
+                        </div>
+                        <div className="notification-detail">
+                            <span className="notification-detail-label">ID Petición:</span>
+                            <span className="font-mono bg-gray-100 px-1 rounded">#{notification.peticionId}</span>
+                        </div>
+                        <div className="notification-detail">
+                            <span className="notification-detail-label">Respondido por:</span>
+                            <span>{notification.respondedor || 'Usuario'}</span>
+                        </div>
+                        <div className="notification-detail">
+                            <span className="notification-detail-label">Sede:</span>
+                            <span>{notification.sede_respuesta?.nombre || 'Sede'}</span>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+    };
+
+    return (
+        <div
+            onClick={() => onClick(notification.id)}
+            className={`notification-item ${isUnread ? 'notification-item-unread' : ''}`}
+        >
+            <div className="notification-content">
+                <div className="notification-text">
+                    <div className="notification-message">
+                        {isUnread && (
+                            <span className="notification-unread-indicator"></span>
+                        )}
+                        {renderContent()}
+                    </div>
+
+                    <div className="notification-time">
+                        {new Date(notification.fecha).toLocaleString('es-ES', {
+                            day: 'numeric',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })}
+                    </div>
                 </div>
 
-                <div className="notification-details">
-                    <div className="notification-detail">
-                        <span className="notification-detail-label">Producto:</span>
-                        <span>ID-{notification.producto_id}</span>
-                    </div>
-                    <div className="notification-detail">
-                        <span className="notification-detail-label">Cantidad:</span>
-                        <span>{notification.cantidad}</span>
-                    </div>
-                    <div className="notification-detail">
-                        <span className="notification-detail-label">Origen:</span>
-                        <span className="truncate">{notification.sede_origen.nombre}</span>
-                    </div>
-                    <div className="notification-detail">
-                        <span className="notification-detail-label">Solicitante:</span>
-                        <span className="truncate">{notification.solicitante}</span>
-                    </div>
-                </div>
-
-                <div className="notification-time">
-                    {new Date(notification.fecha).toLocaleString('es-ES', {
-                        day: 'numeric',
-                        month: 'short',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}
-                </div>
+                <button
+                    onClick={(e) => onRemove(notification.id, e)}
+                    className="notification-remove"
+                    aria-label="Eliminar notificación"
+                >
+                    <XIcon className="notification-small-icon" />
+                </button>
             </div>
-
-            <button
-                onClick={(e) => onRemove(notification.id, e)}
-                className="notification-remove"
-                aria-label="Eliminar notificación"
-            >
-                <XIcon className="notification-small-icon" />
-            </button>
         </div>
-    </div>);
-
-}
+    );
+};

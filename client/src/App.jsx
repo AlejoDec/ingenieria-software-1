@@ -17,7 +17,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import './App.css'
 
 import  Navbar  from './components/shared/Navbar.jsx'
-
+import {NotificacionContainer} from './features/peticiones/containers/NotificacionContainer.jsx';
 
 function App() {
   return (
@@ -34,6 +34,7 @@ function App() {
               <ProtectedRoute>
                 <Navbar />
                 <DashboardContainer />
+                <NotificacionContainer />
               </ProtectedRoute>
             }
           />
@@ -43,6 +44,7 @@ function App() {
             <ProtectedRoute>
               <Navbar/>
               <ProductosContainer />
+              <NotificacionContainer />
             </ProtectedRoute>
           }
           />
@@ -52,6 +54,7 @@ function App() {
             <ProtectedRoute>
               <Navbar/>
               <ProductoFormContainer/>
+              <NotificacionContainer />
             </ProtectedRoute>
           }
           />
@@ -61,6 +64,7 @@ function App() {
             <ProtectedRoute>
               <Navbar/>
               <PeticionTrasladoContainer/>
+              <NotificacionContainer />
             </ProtectedRoute>
           }
           />
@@ -70,6 +74,7 @@ function App() {
             <ProtectedRoute>
               <Navbar/>
               <PeticionesTableContainer/>
+              <NotificacionContainer />
             </ProtectedRoute>
           }
           />

@@ -5,8 +5,6 @@ import inventoryRoutes from './routes/inventory.js';
 import peticionesRoutes from './routes/peticiones.js';
 import auth from './routes/auth.js';
 import { testConnection, sequelize } from './config/db.js';
-import { Producto, Movimiento, Usuario, InventarioSede, Sede } from "./models/index.js";
-import movimientosRouter from "./routes/movimiento.js";
 
 const app = express();
 
@@ -23,7 +21,6 @@ app.use(express.json());
 app.use('/api/products', inventoryRoutes);
 app.use('/api/peticiones', peticionesRoutes)
 app.use('/api', auth);
-app.use("/api/movimientos", movimientosRouter); // Monta la ruta
 
 //ruta de prueba
 app.get('/', (req, res) => {
