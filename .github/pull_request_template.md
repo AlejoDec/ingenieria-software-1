@@ -1,44 +1,59 @@
 # 📌 Pull Request
 
-## 📝 Descripción
+## 📝 Descripción general
 
-<!-- Explica brevemente los cambios realizados -->
-Este PR incluye:
-- [ ] Nueva funcionalidad
-- [ ] Corrección de errores
-- [ ] Mejora de código / Refactorización
-- [ ] Actualización de estilos
-- [ ] Otro: _especificar_
+🧾 **¿Qué hiciste en este PR?**
 
-Descripción general:
-> Se implementó/modificó _________ para __________.
+✍️ <!-- Reemplaza esta línea con una descripción breve y clara -->
+_Ejemplo: Se agregó la página de contacto con validaciones de formulario._
 
 ---
 
-## 🧪 ¿Cómo probar estos cambios?
+## 🔍 Tipo de cambio
 
-1. Clona el repositorio y cambia a esta rama: `git checkout nombre-de-la-rama`
-2. Ejecuta `npm install` si es necesario
-3. Ejecuta `npm start` y verifica que:
-   - _______
-   - _______
+Marca con una "x" lo que corresponda:
 
----
-
-## ✅ Checklist
-
-- [ ] El código sigue las convenciones del proyecto
-- [ ] No se introducen errores o advertencias en la consola
-- [ ] Pruebas realizadas localmente
-- [ ] Documentación actualizada (si aplica)
-- [ ] Revisión de dependencias (si se agregaron nuevas)
+- [ ] Nueva funcionalidad ✨
+- [ ] Corrección de bug 🐛
+- [ ] Refactorización 🔧
+- [ ] Cambios visuales 🎨
+- [ ] Otro: ✍️ <!-- Especifica si seleccionas "Otro" --> _especificar_
 
 ---
 
-## 📸 Capturas (opcional)
+## 🧪 ¿Cómo probarlo?
+
+🧭 **Pasos para probar este PR en local:**
+
+1. `git checkout nombre-de-la-rama` <!-- Reemplaza con el nombre real de la rama -->
+2. `npm install` (si es necesario)
+3. `npm start`
+4. Verifica que:
+   - ✅ ✍️ <!-- Especifica aquí qué debe funcionar correctamente -->
+   - ✅ ✍️ <!-- Añade más validaciones si es necesario -->
+
+✍️ <!-- Puedes agregar notas adicionales aquí si hay algo especial a revisar o configurar -->
 
 ---
 
-## 📚 Referencias (opcional)
+## 📸 Evidencia visual (si aplica)
 
-Closes #[número de issue] (si corresponde)
+🖼️ **Sube capturas de pantalla o GIFs aquí si el cambio afecta la interfaz:**
+
+✍️ <!-- Arrastra las imágenes aquí o usa copiar/pegar -->
+
+---
+
+## ✅ Checklist antes de hacer merge
+
+- [ ] He probado los cambios localmente
+- [ ] El código no lanza errores en consola
+- [ ] La UI funciona como se espera (si aplica)
+- [ ] La documentación fue actualizada (si es necesario)
+
+---
+
+## 🔗 Issues relacionados (opcional)
+
+Closes #✍️ <!-- Reemplaza con el número del issue, si aplica -->
+
