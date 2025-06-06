@@ -47,7 +47,7 @@ export const PeticionesTableContainer = () => {
 
     useEffect(() => {
         fetchPeticiones();
-    }, [user.id]);
+    }, [user.id, vista, setVista]);
 
 
     return (

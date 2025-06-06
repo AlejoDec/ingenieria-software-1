@@ -101,6 +101,7 @@ export const PeticionesView = ({
                     <table className="peticiones-table">
                         <thead className="table-header">
                             <tr>
+                                <th className="table-head-cell">ID</th>
                                 <th className="table-head-cell">Producto</th>
                                 <th className="table-head-cell">Cantidad</th>
                                 <th className="table-head-cell">Solicitante</th>
@@ -112,7 +113,7 @@ export const PeticionesView = ({
                         <tbody>
                             {peticionesRecibidas.map((p) => (
                                 <tr key={p.id} className="table-row">
-                                    <td className="table-cell">{p.producto.nombre}</td>
+                                    <td className="table-cell">{p.id}</td>
                                     <td className="table-cell text-center">{p.cantidad}</td>
                                     <td className="table-cell">{p.solicitante.nombre}</td>
                                     <td className="table-cell">{p.origen.nombre}</td>
